@@ -1,7 +1,7 @@
-var request = require('request');
+const request = require('request');
 
 module.exports = {
-    async show(req, res){
+    async getMunicipios(req, res){
         request({
             url: 'http://179.127.13.245:8099/query/sql',
             method :"POST",
@@ -9,12 +9,12 @@ module.exports = {
                 "content-type": "application/json",
             },
             body: {
-                "sql": "select * from statistical limit 10"
+                "sql": "select distinct municipio_empresa from statistical"
             },
             json: true
         },
         function (err, httpResponse, body) {
-            console.log(err, body);
+            return res.json(body)
         })
     }
 };
