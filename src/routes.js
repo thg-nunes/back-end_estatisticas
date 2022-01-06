@@ -10,11 +10,17 @@ const express = require('express')
 // const SessionController = require('./controllers/SessionController');
 // const VehicleController = require('./controllers/VehicleController');
 // const CategorieController = require('./controllers/CategorieController');
-const DataController = require('./controllers/DataController');
+const dbGetAllMunicipios = require('./controllers/dbGetAllMunicipios');
+const dbGetPorte = require('./controllers/dbGetPorte');
+const dbGetSetores = require('./controllers/dbGetSetores');
 
 const routes = express.Router();
 
-routes.get('/all_municipios', DataController.show);
+routes.get('/all_municipios', dbGetAllMunicipios.getMunicipios);
+
+routes.get('/setores', dbGetSetores.getSetores);
+
+routes.get('/porte', dbGetPorte.getPorte);
 
 // routes.get('/buys', BuyController.show);
 // routes.post('/buy/:categ_id/createBuy', BuyController.store);
