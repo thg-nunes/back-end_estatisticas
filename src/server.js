@@ -1,22 +1,36 @@
-//yarm dev => inicia o servidor do nodemoon
-//yarm init -y
-const express = require('express'); //express ajuda em definições básicas de rotas e coisas do tipo
+const express = require('express'),
+  request = require('request'),
+  bodyParser = require('body-parser'),
+  app = express()
 
-const routes = require('./routes')
-const cors = require('cors')
+var myLimit = typeof(process.argv[2]) != 'undefined' ? process.argv[2] : '1MB'
 
-const app = express();
-const PORT = process.env.PORT || 3333
+app.use(bodyParser.json({limit: myLimit}))
 
-//req = toda requisição do usuario
-//res = devolve uma resposta para o usuário
+app.all('*', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE")
+  res.header("Access-Control-Allow-Headers", req.header('access-control-request-headers'))
 
-// req.query = Acessar query params (para filtros)
-// req.params = Acessar route params (para edição, deleção)
-// req.body = Acessar corpo da requisição (para criação, edição)
+  if (req.method === 'OPTIONS') {
+      res.send()
+  } else {
+      var targetURL = req.header('Target-URL')
+      if (!targetURL) {
+        res.send(500, { error: 'There is no Target-Endpoint header in the request' })
+        return
+      }
+      request({ url: targetURL + req.url, method: req.method, json: req.body, headers: {'Authorization': req.header('Authorization')} },
+        function (error, response, body) {
+          if (error) {
+            console.error('error: ' + response.statusCode)
+          }
+      }).pipe(res)
+  }
+})
 
-app.use(express.json())
-app.use(cors()); 
-app.use(routes);
+app.set('port', process.env.PORT || 3000)
 
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+app.listen(app.get('port'), function () {
+    console.log('Proxy server listening on port ' + app.get('port'))
+})
