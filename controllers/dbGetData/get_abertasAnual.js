@@ -69,7 +69,7 @@ module.exports = {
   async getAbertasAnual(req, res){
 
     const query = await forma_query(req.body.classificacao, req.body.filtros)
-
+    
     request({
       url: 'http://179.127.13.245:8099/query/sql',
       method :"POST",
