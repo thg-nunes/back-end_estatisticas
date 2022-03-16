@@ -1,6 +1,6 @@
 const request = require("request")
 
-const getAbertasMes = (ano, filtros) => {
+const getAbertasMes = (ano, filtros, res) => {
     
   if(filtros == undefined || filtros == null || filtros.state == undefined || filtros.state == null)
   return []
