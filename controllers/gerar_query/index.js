@@ -29,7 +29,7 @@ const forma_query = (classificacao, filtros) => {
       break
   }
 
-  let query = `select  count(*) from statistical `
+  let query = `select ${classificacao}, count(*) ${apelido_tabela} from statistical `
   let filters = ' where '
   const initial_date = new Date()
   const date = initial_date.getMonth() >= 2 ? initial_date.getFullYear() : initial_date.getFullYear()-1
@@ -42,7 +42,7 @@ const forma_query = (classificacao, filtros) => {
     if(key !== 'empresasAbertas' && filtros.state[key] !== ''){
       switch (key) {
         case 'ano':
-          filters += `inicio_atividades between '${filtros.state[key]}-01-01' and '${filtros.state[key]}-12-31' limit 700000`
+          filters += `inicio_atividades between '${filtros.state[key]}-01-01' and '${filtros.state[key]}-12-31' group by ${classificacao} ${orderBy} limit 700000`
           break
         default:
           if(typeof filtros.state[key] == 'object' &&   filtros.state[key].length > 1){
