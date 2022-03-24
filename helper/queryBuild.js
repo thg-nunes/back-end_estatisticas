@@ -73,7 +73,6 @@ const build_query = (filtros) => {
   else
     final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${filtros["ano"]}-12-31' group by month limit 700000`
 
-  console.log(final_query);
   return final_query;
 }
 
