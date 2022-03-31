@@ -12,12 +12,12 @@ const get_secaoAtividade = require('./controllers/dbGetFIlters/get_secaoAtividad
 const get_empresasAbertas = require('./controllers/dbGetData/get_empresasAbertas')
 const get_empresasAtivas = require('./controllers/dbGetData/get_empresasAtivas')
 
-routers.get('/getMunicipios', get_municipios.getMunicipios)
-routers.get('/getPorte', get_porte.getPorte)
-routers.get('/getSetor', get_setor.getSetor)
-routers.get('/getNatureza', get_natureza.getNatureza)
-routers.get('/getDescricaoAtividade', get_descricaoAtividade.getDescricaoAtividade)
-routers.get('/getSecaoAtividade', get_secaoAtividade.getSecaoAtividade)
+routers.get('/municipios', get_municipios.getMunicipios)
+routers.get('/porte', get_porte.getPorte)
+routers.get('/setor', get_setor.getSetor)
+routers.get('/natureza', get_natureza.getNatureza)
+routers.get('/descricaoAtividade', get_descricaoAtividade.getDescricaoAtividade)
+routers.get('/secaoAtividade', get_secaoAtividade.getSecaoAtividade)
 
 routers.post('/empresasAbertas', get_empresasAbertas.getEmpresasAbertas)
 routers.post('/empresasAtivas', get_empresasAtivas.getEmpresasAtivas)
