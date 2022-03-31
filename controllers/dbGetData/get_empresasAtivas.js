@@ -1,9 +1,11 @@
-const getDataEmpresasAtivas = require('../gerar_query/gerar_querys_empresas_ativas')
+const getElementsData = require('../../helper/elementsData');
+const build_query = require('../../helper/queryBuild')
 
 module.exports = {
   async getEmpresasAtivas(req, res){
-
-    const response = await getDataEmpresasAtivas(req.body.classificacao, req.body.filtros, res)
-    return response
+    const query = build_query(req.body)
+    const response = await getElementsData(query);
+    
+    return res.json(response);
   }
-}
+};

@@ -1,24 +1,11 @@
-const request = require('request')
-const forma_query = require('../gerar_query')
+const getElementsData = require('../../helper/elementsData');
+const build_query = require('../../helper/queryBuild')
 
 module.exports = {
   async getEmpresasAbertas(req, res){
-
-    const query = await forma_query(req.body.classificacao, req.body.filtros)
-
-    request({
-      url: 'http://179.127.13.245:8099/query/sql',
-      method :"POST",
-      headers : {
-        "content-type": "application/json",
-      },
-      body: {
-        "sql": query
-      },
-      json: true
-    },
-    function (err, httpResponse, body) {
-      return res.json(body)
-    })
+    const query = build_query(req.body)
+    const response = await getElementsData(query);
+    
+    return res.json(response);
   }
-}
+};
