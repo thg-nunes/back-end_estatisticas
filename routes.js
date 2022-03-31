@@ -19,7 +19,7 @@ routers.get('/getNatureza', get_natureza.getNatureza)
 routers.get('/getDescricaoAtividade', get_descricaoAtividade.getDescricaoAtividade)
 routers.get('/getSecaoAtividade', get_secaoAtividade.getSecaoAtividade)
 
-routers.post('/getEmpresasAbertas', get_empresasAbertas.getEmpresasAbertas)
-routers.post('/getEmpresasAtivas', get_empresasAtivas.getEmpresasAtivas)
+routers.post('/empresasAbertas', get_empresasAbertas.getEmpresasAbertas)
+routers.post('/empresasAtivas', get_empresasAtivas.getEmpresasAtivas)
 
 module.exports = routers
