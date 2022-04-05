@@ -33,6 +33,7 @@ const build_query = (filtros) => {
   let filters = ' where ';
   const initial_date = new Date();
   const date = initial_date.getMonth() >= 2 ? initial_date.getFullYear() : initial_date.getFullYear()-1;
+  const month = initial_date.getMonth() + 1
 
   for (const key in filtros) {
     
@@ -71,7 +72,7 @@ const build_query = (filtros) => {
   if(classificacao !== "abertas_mes")
     final_query = query + filters;
   else
-    final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${filtros["ano"]}-12-31' group by month limit 700000`
+    final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${filtros["ano"]}-0${month.toString().padStart(1, 0)}-31' group by month limit 700000`
 
   return final_query;
 }
