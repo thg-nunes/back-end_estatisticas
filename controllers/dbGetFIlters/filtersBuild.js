@@ -16,8 +16,6 @@ module.exports = {
                index <= 0 ? from_table += `(${key} = '${filtro}' ${state[key].length == 1 ? ') and ' : ''}` : from_table += ` or ${key} = '${filtro} ${index == state[key].length -1 ? ') ' : ''}`
              })
             }
-            console.log(`${initial_query} ${key} `)
-            console.log(`${from_table}`)
           break;
       }
     }
