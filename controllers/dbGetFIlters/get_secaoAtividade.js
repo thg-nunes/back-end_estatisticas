@@ -1,8 +1,10 @@
 const getFilterData = require('../../helper/filterData');
+const filterBuildData = require('../../helper/filterQueryBuild');
 
 module.exports = {
-  async getSecaoAtividade(req, res){
-    const query = "select distinct secao_atividade secao_atividade from statistical where secao_atividade != 'null' limit 50";
+  async getSecaoAtividade(req, res) {
+
+    const query = filterBuildData.FilterQueryBuild('secao_atividade', req.body)
     const response = await getFilterData(query);
     
     return res.json(response);

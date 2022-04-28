@@ -1,35 +1,38 @@
 
-const build_query = (filtros) => {
+const build_query = (filtros, distinct_filtro="") => {
   if(filtros == undefined || filtros == null)
     return [];
   
   var final_query = "";
-  const classificacao = filtros.classificacao;
-  const apelido_coluna_1 = 'natureza_empresa';
-  const apelido_coluna_2 = 'municipio';
-  const apelido_coluna_3 = 'atividade';
+  let filterComplement = "";
+  let columnNickname = "";
+  let classificacao = ""
+  let whereToFilters = "";
 
-  let columnNickname = '';
-  let filterComplement = '';
+  if(distinct_filtro === ""){
+    classificacao = filtros.classificacao;
 
-  if (classificacao != undefined && classificacao != null && classificacao !== "abertas_mes"){
-    switch(classificacao){
-      case "natureza":
-      case "municipio_empresa":
-      case "secao_atividade":
-      case "porte":
-      case "setor":
-        columnNickname = `qtd_${classificacao}`;
-        orderBy = `order by ${columnNickname} desc`;
-        break
+    if (classificacao != undefined && classificacao != null && classificacao !== "abertas_mes"){
+      switch(classificacao){
+        case "natureza":
+        case "municipio_empresa":
+        case "secao_atividade":
+        case "porte":
+        case "setor":
+          columnNickname = `qtd_${classificacao}`;
+          orderBy = `order by ${columnNickname} desc`;
+          break
+      }
     }
+    if(columnNickname === "")
+      var query = `select count(*) from statistical `;
+    else
+      var query = `select ${classificacao}, count(*) as ${columnNickname} from statistical `;
+  }else{
+    classificacao = distinct_filtro;
+    var query = `select distinct ${distinct_filtro} from statistical `;
   }
 
-  if(columnNickname === "")
-    var query = `select count(*) from statistical `;
-  else
-    var query = `select ${classificacao}, count(*) as ${columnNickname} from statistical `;
-  
   let filters = ' where ';
   const initial_date = new Date();
   const date = initial_date.getMonth() >= 2 ? initial_date.getFullYear() : initial_date.getFullYear()-1;
@@ -61,8 +64,10 @@ const build_query = (filtros) => {
               index !== 0 ? filterComplement += ` or ${key} = '${element}' ${index == filtros[key].length - 1 ? ') and ' : ''} ` : filterComplement += `(${key} = '${element}' `;
             })
             filters = 'where ' + filterComplement;
+            whereToFilters += `${filterComplement}`;
           } else {
             filters += `${key} = '${filtros[key]}' and `;
+            whereToFilters += `${key} = '${filtros[key]}' and `;
           }
           break
       }
@@ -79,7 +84,7 @@ const build_query = (filtros) => {
     final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${max_date}' group by month limit 700000`
   }
   
-  return final_query;
+  return ({final_query, whereToFilters});
 }
 
 module.exports = build_query
