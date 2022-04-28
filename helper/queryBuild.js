@@ -1,16 +1,14 @@
 
 const build_query = (filtros) => {
-  if(filtros == undefined || filtros == null)
+    if(filtros == undefined || filtros == null)
     return [];
   
   var final_query = "";
   const classificacao = filtros.classificacao;
-  const apelido_coluna_1 = 'natureza_empresa';
-  const apelido_coluna_2 = 'municipio';
-  const apelido_coluna_3 = 'atividade';
 
   let columnNickname = '';
   let filterComplement = '';
+  let whereToFilters = '';
 
   if (classificacao != undefined && classificacao != null && classificacao !== "abertas_mes"){
     switch(classificacao){
@@ -61,8 +59,10 @@ const build_query = (filtros) => {
               index !== 0 ? filterComplement += ` or ${key} = '${element}' ${index == filtros[key].length - 1 ? ') and ' : ''} ` : filterComplement += `(${key} = '${element}' `;
             })
             filters = 'where ' + filterComplement;
+            whereToFilters += `${filterComplement}`;
           } else {
             filters += `${key} = '${filtros[key]}' and `;
+            whereToFilters += `${key} = '${filtros[key]}' and `;
           }
           break
       }
@@ -78,8 +78,8 @@ const build_query = (filtros) => {
     
     final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${max_date}' group by month limit 700000`
   }
-  
-  return final_query;
+
+  return ({final_query, whereToFilters});
 }
 
 module.exports = build_query
