@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 const build_query = (filtros) => {
     if(filtros == undefined || filtros == null)
     return [];
@@ -9,25 +10,41 @@ const build_query = (filtros) => {
   let columnNickname = '';
   let filterComplement = '';
   let whereToFilters = '';
+=======
+const build_query = (filtros, distinct_filtro="") => {
+  if(filtros == undefined || filtros == null)
+    return [];
+  
+  var final_query = "";
+  let filterComplement = "";
+  let columnNickname = "";
+  let classificacao = ""
 
-  if (classificacao != undefined && classificacao != null && classificacao !== "abertas_mes"){
-    switch(classificacao){
-      case "natureza":
-      case "municipio_empresa":
-      case "secao_atividade":
-      case "porte":
-      case "setor":
-        columnNickname = `qtd_${classificacao}`;
-        orderBy = `order by ${columnNickname} desc`;
-        break
+  if(distinct_filtro === ""){
+    classificacao = filtros.classificacao;
+>>>>>>> 9e4ffb7d091ab3fad9011935ff09d93bc9f42483
+
+    if (classificacao != undefined && classificacao != null && classificacao !== "abertas_mes"){
+      switch(classificacao){
+        case "natureza":
+        case "municipio_empresa":
+        case "secao_atividade":
+        case "porte":
+        case "setor":
+          columnNickname = `qtd_${classificacao}`;
+          orderBy = `order by ${columnNickname} desc`;
+          break
+      }
     }
+    if(columnNickname === "")
+      var query = `select count(*) from statistical `;
+    else
+      var query = `select ${classificacao}, count(*) as ${columnNickname} from statistical `;
+  }else{
+    classificacao = distinct_filtro;
+    var query = `select distinct ${distinct_filtro} from statistical `;
   }
 
-  if(columnNickname === "")
-    var query = `select count(*) from statistical `;
-  else
-    var query = `select ${classificacao}, count(*) as ${columnNickname} from statistical `;
-  
   let filters = ' where ';
   const initial_date = new Date();
   const date = initial_date.getMonth() >= 2 ? initial_date.getFullYear() : initial_date.getFullYear()-1;

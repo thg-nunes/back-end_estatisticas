@@ -1,5 +1,5 @@
 const getElementsData = require('../../helper/elementsData');
-const build_query = require('../../helper/queryBuild')
+const build_query = require('../../helper/queryBuild');
 
 module.exports = {
   async getEmpresasAbertas(req, res){
