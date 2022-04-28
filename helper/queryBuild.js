@@ -1,16 +1,4 @@
 
-<<<<<<< HEAD
-const build_query = (filtros) => {
-    if(filtros == undefined || filtros == null)
-    return [];
-  
-  var final_query = "";
-  const classificacao = filtros.classificacao;
-
-  let columnNickname = '';
-  let filterComplement = '';
-  let whereToFilters = '';
-=======
 const build_query = (filtros, distinct_filtro="") => {
   if(filtros == undefined || filtros == null)
     return [];
@@ -19,10 +7,10 @@ const build_query = (filtros, distinct_filtro="") => {
   let filterComplement = "";
   let columnNickname = "";
   let classificacao = ""
+  let whereToFilters = "";
 
   if(distinct_filtro === ""){
     classificacao = filtros.classificacao;
->>>>>>> 9e4ffb7d091ab3fad9011935ff09d93bc9f42483
 
     if (classificacao != undefined && classificacao != null && classificacao !== "abertas_mes"){
       switch(classificacao){
@@ -95,7 +83,7 @@ const build_query = (filtros, distinct_filtro="") => {
     
     final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${max_date}' group by month limit 700000`
   }
-
+  
   return ({final_query, whereToFilters});
 }
 
