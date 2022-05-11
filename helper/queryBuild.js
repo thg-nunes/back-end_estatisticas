@@ -8,6 +8,7 @@ const build_query = (filtros, distinct_filtro="") => {
   let columnNickname = "";
   let classificacao = ""
   let whereToFilters = "";
+  let filters = ' where ';
 
   if(distinct_filtro === ""){
     classificacao = filtros.classificacao;
@@ -21,6 +22,7 @@ const build_query = (filtros, distinct_filtro="") => {
         case "setor":
           columnNickname = `qtd_${classificacao}`;
           orderBy = `order by ${columnNickname} desc`;
+          filters += `${filtros.classificacao} != 'null' and `
           break
       }
     }
@@ -33,7 +35,6 @@ const build_query = (filtros, distinct_filtro="") => {
     var query = `select distinct ${distinct_filtro} from statistical `;
   }
 
-  let filters = ' where ';
   const initial_date = new Date();
   const date = initial_date.getMonth() >= 2 ? initial_date.getFullYear() : initial_date.getFullYear()-1;
   const month = initial_date.getMonth() + 1
@@ -83,7 +84,7 @@ const build_query = (filtros, distinct_filtro="") => {
     
     final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${max_date}' group by month limit 700000`
   }
-  
+
   return ({final_query, whereToFilters});
 }
 
