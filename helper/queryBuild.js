@@ -63,10 +63,14 @@ const build_query = (filtros, distinct_filtro="") => {
           if(typeof filtros[key] == 'object' && filtros[key].length > 1){
             filtros[key].map((element, index) => {
               index !== 0 ? filterComplement += ` or ${key} = '${element}' ${index == filtros[key].length - 1 ? ') and ' : ''} ` : filterComplement += `(${key} = '${element}' `;
-            })
-            filters = 'where ' + filterComplement;
+            })           
+            filters = `where
+              ${filtros.classificacao != undefined && filtros.classificacao != null && filtros.classificacao !== "abertas_mes" && filtros.classificacao != '' ?
+                `${filtros.classificacao} != 'null' and ` : ''
+              } ` + filterComplement;
             whereToFilters += `${filterComplement}`;
           } else {
+            filters += `${key} != 'null' and ${key} = '${filtros[key]}' and `;
             filters += `${key} = '${filtros[key]}' and `;
             whereToFilters += `${key} = '${filtros[key]}' and `;
           }
