@@ -49,9 +49,9 @@ const build_query = (filtros, distinct_filtro="") => {
           if(classificacao !== "abertas_mes")
             if(filtros['empresasAbertas'])
               if(columnNickname === "")
-                filters += `inicio_atividades between '${filtros[key]}-01-01' and '${filtros[key]}-12-31' limit 700000`;
+                filters += `inicio_atividades between '${filtros[key]}-01-01' and '${filtros[key]}-${month.toString().padStart(2, '0')}-31' limit 700000`;
               else
-                filters += `inicio_atividades between '${filtros[key]}-01-01' and '${filtros[key]}-12-31' group by ${classificacao} ${orderBy} limit 700000`;
+                filters += `inicio_atividades between '${filtros[key]}-01-01' and '${filtros[key]}-${month.toString().padStart(2, '0')}-31' group by ${classificacao} ${orderBy} limit 700000`;
             else
               if(columnNickname === "")
                 filters += `(situacao_siarco = 'REGISTRO ATIVO' or situacao_siarco = 'REGISTRO ATIVO PROVISÓRIO') limit 700000`;
@@ -77,9 +77,9 @@ const build_query = (filtros, distinct_filtro="") => {
   if(classificacao !== "abertas_mes")
     final_query = query + filters;
   else{
-    var max_date = `${filtros["ano"]}-12-31`
+    var max_date = `${filtros["ano"]}-${month.toString().padStart(2, '0')}-31`
     if(initial_date.getFullYear() == filtros["ano"])
-      var max_date = `${filtros["ano"]}-${month.toString().padStart(1, 0)}-31`    
+      var max_date = `${filtros["ano"]}-${month.toString().padStart(2, '0')}-31`    
     
     final_query = `select month(FromDateTime(inicio_atividades, 'YYYY-MM-dd'), 'UTC') AS month, count(month) FROM statistical ${filters} inicio_atividades between '${filtros["ano"]}-01-01' and '${max_date}' group by month limit 700000`
   }
