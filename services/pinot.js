@@ -4,7 +4,7 @@ const getPinotData = async (query) => {
     const headers = {"content-type": "application/json"};
     const body = {"sql": query};
     
-    const response = await axios.post('http://179.127.13.245:8099/query/sql', body, {
+    const response = await axios.post(process.env.PINOT_ENDPOINT, body, {
         headers: headers
     });
     
