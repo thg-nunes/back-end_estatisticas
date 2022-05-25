@@ -17,7 +17,7 @@ const build_query = (filtros, distinct_filtro="") => {
       switch(classificacao){
         case "natureza":
         case "municipio_empresa":
-        case "secao_atividade":
+        case "descricao_atividade":
         case "porte":
         case "setor":
           columnNickname = `qtd_${classificacao}`;
