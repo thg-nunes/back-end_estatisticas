@@ -82,7 +82,7 @@ const build_query = (filtros, distinct_filtro="") => {
   if(classificacao !== "abertas_mes")
     final_query = query + filters;
   else{
-    var max_date = `${filtros["ano"]}-${month.toString().padStart(2, '0')}-31`
+    var max_date = `${filtros["ano"]}-12-31`
     if(initial_date.getFullYear() == filtros["ano"])
       var max_date = `${filtros["ano"]}-${month.toString().padStart(2, '0')}-31`    
     
