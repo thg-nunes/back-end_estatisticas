@@ -37,14 +37,14 @@ const build_query = (filtros, distinct_filtro="") => {
 
   const initial_date = new Date();
   const date = initial_date.getMonth() >= 2 ? initial_date.getFullYear() : initial_date.getFullYear()-1;
-  const month = initial_date.getMonth() + 1
+  const month = filtros.mes !== '' ? filtros.mes : initial_date.getMonth() + 1
 
   for (const key in filtros) {
     
     if(filtros[key] == 'ano' && filtros[key] == '')
       filtros[key] += date;
 
-    if((key !== 'empresasAbertas' && key !== 'classificacao') && filtros[key] !== ''){
+    if((key !== 'empresasAbertas' && key !== 'classificacao' && key !== 'mes') && filtros[key] !== ''){
       switch (key) {
         case 'ano':
           if(classificacao !== "abertas_mes")
@@ -52,7 +52,10 @@ const build_query = (filtros, distinct_filtro="") => {
               if(columnNickname === "")
                 filters += `inicio_atividades between '${filtros[key]}-01-01' and '${filtros[key]}-${month.toString().padStart(2, '0')}-31' limit 700000`;
               else
-                filters += `inicio_atividades between '${filtros[key]}-01-01' and '${filtros[key]}-${month.toString().padStart(2, '0')}-31' group by ${classificacao} ${orderBy} limit 700000`;
+                filtros.mes !== '' ?
+                filters += `inicio_atividades between '${filtros[key]}-${filtros.mes.toString().padStart(2, '0')}-01' and '${filtros[key]}-${filtros.mes.toString().padStart(2, '0')}-31' group by ${classificacao} ${orderBy} limit 700000` :
+                filters += `inicio_atividades between '${filtros[key]}-01-01' and '${filtros[key]}-${filtros[key] < initial_date.getFullYear() ? '12' :  month.toString().padStart(2, '0')
+                }-31' group by ${classificacao} ${orderBy} limit 700000`
             else
               if(columnNickname === "")
                 filters += `(situacao_siarco = 'REGISTRO ATIVO' or situacao_siarco = 'REGISTRO ATIVO PROVISÓRIO') limit 700000`;
